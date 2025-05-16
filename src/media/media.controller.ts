@@ -9,7 +9,7 @@ import { UploadMediaDto } from "./dtos";
 export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
 
-  @Post("/upload")
+  @Post()
   @UseInterceptors(FileInterceptor("file"))
   async upload(@UploadedFile() file: Express.Multer.File, @Body() body: UploadMediaDto) {
     return await this.mediaService.uploadMedia(file, body);
