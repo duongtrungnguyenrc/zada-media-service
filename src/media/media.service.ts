@@ -1,5 +1,4 @@
-import { ResponseEntity } from "@duongtrungnguyen/micro-commerce";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { I18nService } from "nestjs-i18n";
 import { Repository } from "typeorm";
@@ -10,6 +9,7 @@ import { FileSystemService } from "~file-system";
 import { MediaEntity } from "./entities";
 import { UploadMediaDto } from "./dtos";
 import { IMedia } from "./interfaces";
+import { MediaVM } from "./vms";
 
 @Injectable()
 export class MediaService {
@@ -19,13 +19,14 @@ export class MediaService {
     private readonly i18nService: I18nService,
   ) {}
 
-  async uploadMedia(file: Express.Multer.File, data: UploadMediaDto): Promise<ResponseEntity<undefined>> {
+  async upload(userId: string, file: Express.Multer.File, data: UploadMediaDto): Promise<MediaVM> {
     const fileName = `${Date.now()}-${data.fileName || file.originalname}`;
 
     const media = this.mediaRepository.create({
       originalName: file.originalname,
       mimeType: file.mimetype,
       size: file.size,
+      userId,
       fileName,
     });
 
@@ -33,28 +34,22 @@ export class MediaService {
 
     await this.fileSystemService.saveFile(file.buffer, media.id.toString());
 
-    return {
-      message: this.i18nService.t("media.uploaded-success"),
-      data: undefined,
-      code: 201,
-    };
+    return media;
   }
 
-  async removeMedia(id: string): Promise<ResponseEntity<undefined>> {
-    const media = await this.mediaRepository.findOneBy({ id });
+  async delete(userId: string, id: string): Promise<boolean> {
+    const media = await this.mediaRepository.findOne({ where: { id }, select: ["id", "userId"] });
 
     if (!media) throw new NotFoundException(this.i18nService.t("media.not-found"));
 
+    if (media.id !== userId) throw new ForbiddenException(this.i18nService.t("media.forbidden-delete"));
+
     await this.mediaRepository.remove(media);
 
-    return {
-      message: this.i18nService.t("media.remove-success"),
-      data: undefined,
-      code: 200,
-    };
+    return true;
   }
 
-  async getMedia(id: string, response: Response): Promise<void> {
+  async get(id: string, response: Response): Promise<void> {
     const media: IMedia = await this.mediaRepository.findOneBy({ id });
 
     if (!media) throw new NotFoundException(this.i18nService.t("media.not-found"));

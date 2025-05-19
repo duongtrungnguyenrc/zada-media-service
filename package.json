@@ -20,12 +20,13 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@duongtrungnguyen/micro-commerce": "^0.0.7",
-    "@duongtrungnguyen/nestro": "^0.1.19",
+    "@duongtrungnguyen/micro-commerce": "^0.0.28",
+    "@duongtrungnguyen/nestro": "^0.1.22",
     "@nestjs/common": "^11.1.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.1.1",
     "@nestjs/platform-express": "^11.1.1",
+    "@nestjs/swagger": "^11.2.0",
     "@nestjs/typeorm": "^11.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",

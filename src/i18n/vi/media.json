@@ -1,4 +1,5 @@
 {
   "not-found": "Tệp không tồn tại",
-  "uploaded-success": "Tải dữ liệu thành công"
+  "uploaded-success": "Tải dữ liệu thành công",
+  "forbidden-delete": "Nguời dùng không có quyền xoá tài nguyên này"
 }

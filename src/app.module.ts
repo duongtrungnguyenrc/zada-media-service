@@ -1,4 +1,4 @@
-import { AcceptLanguageResolver, HeaderResolver, I18nModule, QueryResolver } from "nestjs-i18n";
+import { AcceptLanguageResolver, I18nModule } from "nestjs-i18n";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { Module } from "@nestjs/common";
@@ -16,14 +16,7 @@ import { MediaModule } from "~media";
         path: path.join(__dirname, "i18n"),
         watch: true,
       },
-      resolvers: [
-        {
-          use: QueryResolver,
-          options: ["lang"],
-        },
-        AcceptLanguageResolver,
-        new HeaderResolver(["x-lang"]),
-      ],
+      resolvers: [AcceptLanguageResolver],
     }),
     TypeOrmModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({

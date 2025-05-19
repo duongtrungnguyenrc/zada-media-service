@@ -7,6 +7,9 @@ export class MediaEntity implements IMedia {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @Column({ type: "uuid" })
+  userId: string;
+
   @Column()
   originalName: string;
 

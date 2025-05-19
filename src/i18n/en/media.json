@@ -1,4 +1,5 @@
 {
   "not-found": "Media not found",
-  "uploaded-success": "Media uploaded success"
+  "uploaded-success": "Media uploaded success",
+  "forbidden-delete": "User does not have access to delete this resource"
 }
