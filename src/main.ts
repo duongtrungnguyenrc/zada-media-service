@@ -9,15 +9,13 @@ import { AppModule } from "~app.module";
 async function bootstrap() {
   const configService: ConfigService = new ConfigService();
 
-  const serviceName = configService.getOrThrow<string>("SERVICE_NAME");
-
   const app = await createNestroApplication(AppModule, {
     server: {
       host: configService.get<string>("NESTRO_HOST"),
       port: configService.get<number>("NESTRO_PORT"),
     },
     client: {
-      name: serviceName,
+      name: configService.getOrThrow<string>("SERVICE_NAME"),
       host: configService.get<string>("SERVICE_HOST"),
       port: configService.get<number>("SERVICE_PORT"),
     },
@@ -28,7 +26,7 @@ async function bootstrap() {
   app.use(I18nMiddleware);
   app.useGlobalPipes(new ValidationPipe());
 
-  const documentConfig = new DocumentBuilder().setTitle(serviceName).build();
+  const documentConfig = new DocumentBuilder().build();
   const swaggerDocument = SwaggerModule.createDocument(app, documentConfig);
 
   SwaggerModule.setup("api", app, swaggerDocument, {

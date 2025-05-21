@@ -48,6 +48,6 @@ export class FileSystemService {
   }
 
   getFilePath(mediaId: string): string {
-    return path.resolve(this.uploadDir, mediaId);
+    return path.join(this.uploadDir, String(mediaId));
   }
 }

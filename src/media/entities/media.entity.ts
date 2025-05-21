@@ -4,10 +4,10 @@ import { IMedia } from "../interfaces";
 
 @Entity("media")
 export class MediaEntity implements IMedia {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn("identity")
   id: string;
 
-  @Column({ type: "uuid" })
+  @Column({ length: 20 })
   userId: string;
 
   @Column()
